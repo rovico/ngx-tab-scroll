@@ -17,6 +17,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-tab-scroll": [
+        "dist/ngx-tab-scroll"
+      ],
+      "ngx-tab-scroll/*": [
+        "dist/ngx-tab-scroll/*"
+      ]
+    }
   }
 }
