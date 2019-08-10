@@ -1,0 +1,50 @@
+<div style="padding:30px">
+  <h1>Demo for angular-ui-tab-scroll</h1>
+  <a href="https://github.com/VersifitTechnologies/angular-ui-tab-scroll">https://github.com/VersifitTechnologies/angular-ui-tab-scroll</a>
+
+  <br/><br/><br/><br/>
+  <ngx-tab-scroll
+    #ngbTabScroll
+    tooltipLeftPlacement="top"
+    [dropDownHeaderTemplate]="menuHeaderTemplate"
+    dropDownHeaderClass="menuHeader">
+    <ngb-tabset style="height: 300px">
+      <ngb-tab title="First tab">
+        <ng-template ngbTabContent>First tab content</ng-template>
+      </ngb-tab>
+      <ng-template ngFor [ngForOf]="tabs" let-tab>
+        <ngb-tab title="{{tab.heading}}">
+          <ng-template ngbTabContent>{{tab.content}}</ng-template>
+        </ngb-tab>
+      </ng-template>
+      <ngb-tab title="Last tab">
+        <ng-template ngbTabContent>Last tab content</ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </ngx-tab-scroll>
+
+  <ng-template #menuHeaderTemplate>
+    <div>
+      <a href="#">something</a>
+      <a href="#">nothing</a>
+    </div>
+  </ng-template>
+
+  <br/><br/><br/><br/><br/><br/>
+  <button type="button" class="btn btn-default" (click)="addTab()">add tab</button>
+  <button type="button" class="btn btn-default" (click)="removeTab()">remove tab</button>
+  <br/><br/><br/>
+  <h4>usage of api:</h4>
+  <button type="button" class="btn btn-default" (click)="reCalcScroll()">re-calculate scroll</button>
+  <div class="btn-group" ngbDropdown>
+    <button id="single-button" type="button" class="btn btn-default" ngbDropdownToggle>
+      Scroll into view <span class="caret"></span>
+    </button>
+    <ul ngbDropdownMenu role="menu" aria-labelledby="single-button">
+      <li role="menuitem" (click)="scrollIntoView()"><a href="#">Selected tab</a></li>
+      <li role="menuitem" (click)="scrollIntoView(6)"><a href="#">Tab index 6</a></li>
+    </ul>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

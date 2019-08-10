@@ -12,7 +12,7 @@ app.controller('MainCtrl', function() {
   vm.scrlTabsApi = {};
 
   vm.reCalcScroll = function() {
-    if(vm.scrlTabsApi.doRecalculate) {
+    if(vm.scrlTabsApi.doRecalculafte) {
       vm.scrlTabsApi.doRecalculate();
     }
   };
