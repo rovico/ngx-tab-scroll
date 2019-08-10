@@ -1,11 +1,12 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TabScrollComponent } from './tab-scroll.component';
 import { TabScrollConfig, TabScrollConfigInterface, TabScrollConfigService } from './tab-scroll-config';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [TabScrollComponent],
-  imports: [
-  ],
+  imports: [CommonModule, NgbTooltipModule, NgbDropdownModule],
   exports: [TabScrollComponent]
 })
 export class TabScrollModule {

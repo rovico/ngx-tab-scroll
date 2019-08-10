@@ -1,5 +1,18 @@
-import { Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChild,
+  ElementRef, forwardRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit, Renderer2,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { TabScrollConfigService } from './tab-scroll-config';
+import { NgbTab, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+import { TabScrollAnimationService } from './tab-scroll-animation.service';
 
 export class TabScrollTab {
   active: boolean;
@@ -15,7 +28,8 @@ export class TabScrollTab {
  * scrollTabIntoView(number) - scroll the tab index into center of view.
  */
 export class TabScrollAPI {
-  constructor(private $scope: TabScrollComponent) {}
+  constructor(private $scope: TabScrollComponent) {
+  }
 
   doRecalculate() {
     this.$scope.reCalcAll();
@@ -35,14 +49,20 @@ export class TabScrollAPI {
   selector: 'ngx-tab-scroll',
   template: `
     <!--SHOULD NOT BE USED vvv-->
-    <ng-template #tooltipLeftTemplate><div [innerHtml]="tooltipLeftHtml"></div></ng-template>
-    <ng-template #tooltipRightTemplate><div [innerHtml]="tooltipRightHtml"></div></ng-template>
+    <ng-template #tooltipLeftTemplate>
+      <div [innerHtml]="tooltipLeftHtml"></div>
+    </ng-template>
+    <ng-template #tooltipRightTemplate>
+      <div [innerHtml]="tooltipRightHtml"></div>
+    </ng-template>
     <!--/SHOULD NOT BE USED ^^^-->
     <div class="ui-tabs-scrollable" [ngClass]="{'show-drop-down': !hideDropDown}">
       <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
               [ngbTooltip]="tooltipLeftTemplate"></button>
-      <div class="spacer" ngClass="{'hidden-buttons': hideButtons}"><ng-content></ng-content></div>
+      <div #spacer class="spacer" ngClass="{'hidden-buttons': hideButtons}">
+        <ng-content></ng-content>
+      </div>
       <button type="button" (mousedown)="scrollButtonDown('right', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableRight" class="btn nav-button right-nav-button" [placement]="tooltipRightDirection"
               [ngbTooltip]="tooltipRightTemplate"></button>
@@ -50,8 +70,10 @@ export class TabScrollAPI {
       <div class="btn-group" [ngClass]="[dropDownClass]" ngbDropdown container="body" [hidden]="hideDropDown">
         <button type="button" class="btn" ngbDropdownToggle></button>
         <ul class="dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
-          <li [ngClass]="dropDownHeaderClass"><ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container></li>
-          <li role="menuitem" *ngFor="tab in dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
+          <li [ngClass]="dropDownHeaderClass">
+            <ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container>
+          </li>
+          <li role="menuitem" *ngFor="let tab of dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
               (click)="activateTab(tab)">
             <a href><span class="dropDownTabActiveMark"
                           [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}"></span>{{tab.tabScrollTitle}}</a>
@@ -63,9 +85,10 @@ export class TabScrollAPI {
   styleUrls: [
     './tab-scroll.scss',
     './tab-scroll-flat.scss'
-  ]
+  ],
+  providers: [TabScrollAnimationService]
 })
-export class TabScrollComponent implements OnInit, OnDestroy {
+export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * whether or not to show the drop-down for navigating the tabs,
@@ -124,7 +147,14 @@ export class TabScrollComponent implements OnInit, OnDestroy {
   /**
    * Template for tabs bootstrap dropdown set custom header inside the drop-down. default is empty.
    */
-  @Input() dropDownHeaderTemplate: TemplateRef;
+  @Input() dropDownHeaderTemplate: TemplateRef<any>;
+
+  @ViewChild('spacer') navTabWrapper: ElementRef;
+
+  /**
+   * get Contentchild NgbTabset
+   */
+  @ContentChild(forwardRef(() => NgbTabset)) tabset!: NgbTabset;
 
   api: TabScrollAPI;
 
@@ -149,7 +179,7 @@ export class TabScrollComponent implements OnInit, OnDestroy {
   /**
    * Tabs to walk through
    */
-  dropdownTabs: TabScrollTab[];
+  dropdownTabs: NgbTab[];
 
   /**
    * Dropdown should be hidden
@@ -178,16 +208,17 @@ export class TabScrollComponent implements OnInit, OnDestroy {
   private mouseDownInterval: any;
   private isHolding = false;
   private winResizeTimeout: any;
+  private tabContainer: HTMLElement;
 
-  constructor(private config: TabScrollConfigService) {
+  constructor(
+    private config: TabScrollConfigService,
+    private animation: TabScrollAnimationService,
+    private renderer: Renderer2) {
     this.api = new TabScrollAPI(this);
-    // @TODO may be incorrect!!! Use QueryL:ist of {View/Content}Children
     this.dropdownTabs = [];
     this.hideButtons = true;
     this.hideDropDown = true;
-    // @TODO may be incorrect!!! Use QueryL:ist of {View/Content}Children
     this.tooltipRightHtml = '';
-    // @TODO may be incorrect!!! Use QueryL:ist of {View/Content}Children
     this.tooltipLeftHtml = '';
     this.disableLeft = true;
     this.disableRight = true;
@@ -200,157 +231,148 @@ export class TabScrollComponent implements OnInit, OnDestroy {
     this.userShowTooltips = this.showTooltips !== undefined ? this.showTooltips === true : this.config.getConfig().showTooltips === true;
     this.scrollByPixels = this.scrollBy ? this.scrollBy : this.config.getConfig().scrollBy;
     this.leftScrollAdditionPixels = this.leftScrollAddition ? this.leftScrollAddition : this.config.getConfig().leftScrollAddition;
-
-    // // this is how we init for the first time.
-    // $timeout(function(){
-    //   $scope.init();
-    // });
-    //
-
-    // WHAT IS '$window', '$interval', '$timeout','$sce', ?????
   }
 
   ngOnDestroy(): void {
-    // // when scope destroyed
-    // $scope.$on('$destroy', function () {
-    //   angular.element($window).off('resize', $scope.onWindowResize);
-    //   $scope.dropdownTabs = [];
-    // });
+    this.dropdownTabs = [];
   }
 
-  init = function() {
-    $scope.tabContainer = $el[0].querySelector('.spacer ul.nav-tabs');
-    if(!$scope.tabContainer)return;
-
-    var autoRecalc = $scope.autoRecalculate ? $scope.autoRecalculate === 'true' : scrollableTabsetConfig.autoRecalculate;
-    if(autoRecalc) {
-      var tabsetElement = angular.element($el[0].querySelector('.spacer div'));
-      $scope.$watchCollection(
-        function () {
-          return tabsetElement.isolateScope() ? tabsetElement.isolateScope().tabs : false;
-        },
-        function () {
-          $timeout(function () {
-            $scope.reCalcAll()
-          });
-        }
-      );
+  ngAfterViewInit(): void {
+    this.tabContainer = this.navTabWrapper.nativeElement.querySelector('ul.nav-tabs');
+    if (!this.tabContainer) {
+      throw new Error('You have to specify ngb-bootstrap tabs right between inside component tag');
     }
 
-    $scope.reCalcAll();
-
-    // attaching event to window resize.
-    angular.element($window).on('resize', $scope.onWindowResize);
+    const autoRecalc = this.autoRecalculate !== undefined ? this.autoRecalculate : this.config.getConfig().autoRecalculate;
+    if (autoRecalc) {
+      this.tabset.tabChange.subscribe(() => {
+        this.reCalcAll();
+      });
+    }
+    this.reCalcAll();
   }
 
-  scrollButtonDown(direction: string, event) {
-
+  /**
+   * @param direction where to scroll tabs left or right
+   * @param event native event
+   */
+  scrollButtonDown(direction, event) {
+    event.stopPropagation();
+    this.isHolding = true;
+    const realScroll = direction === 'left' ? 0 - this.scrollByPixels : this.scrollByPixels;
+    this.animation.scrollTo(this.tabContainer, realScroll, 150, () => {
+      setTimeout(() => {
+        this.reCalcSides();
+      });
+    }, true);
+    this.initMouseDownInterval(realScroll, event);
   }
 
   scrollButtonUp() {
-
+    this.cancelMouseDownInterval();
   }
 
-  activateTab(tab: TabScrollTab) {
-
+  /**
+   * Go to the tab using dropdown
+   * @param tab NgbTab to make it current
+   */
+  activateTab(tab: NgbTab) {
+    if (tab.disabled) {
+      return;
+    }
+    this.tabset.select(tab.id);
+    window.setTimeout(() => {
+      this.scrollTabIntoView();
+    });
   }
 
-  // re-calculate if the scroll buttons are needed, than call re-calculate for both buttons.
-  reCalcAll = function() {
-    if(!$scope.tabContainer)return;
+  /**
+   * re-calculate if the scroll buttons are needed, than call re-calculate for both buttons.
+   */
+  reCalcAll() {
+    if (!this.tabContainer) {
+      return;
+    }
 
-    $scope.hideButtons = $scope.tabContainer.scrollWidth <= $scope.tabContainer.offsetWidth;
-    $scope.hideDropDown = $scope.userShowDropDown ? $scope.hideButtons : true;
-    $scope.isButtonsVisible = !$scope.hideButtons;
+    this.hideButtons = this.tabContainer.scrollWidth <= this.tabContainer.offsetWidth;
+    this.hideDropDown = this.userShowDropDown ? this.hideButtons : true;
+    this.isButtonsVisible = !this.hideButtons;
 
-    if(!$scope.hideButtons) {
+    if (!this.hideButtons) {
 
-      if(!$scope.hideDropDown) {
-        var allTabs = $scope.tabContainer.querySelectorAll('ul.nav-tabs > li');
-        $scope.dropdownTabs = [];
-        angular.forEach(allTabs, function (tab) {
-          var ignore = tab.getAttribute("data-tabScrollIgnore");
-          if(!ignore){
-            var heading = tab.getAttribute("data-tabScrollHeading");
-            var tabScope = angular.element(tab).isolateScope();
-            //push new field to use as title in the drop down.
-            tabScope.tabScrollTitle = heading ? heading : tab.textContent.trim();
-            $scope.dropdownTabs.push(tabScope);
+      if (!this.hideDropDown) {
+        this.dropdownTabs = [];
+        this.dropdownTabs = this.getAllTabs().reduce((acu, htmlTab: HTMLElement) => {
+          const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
+          if (ignore) {
+            return acu;
           }
-        });
+          const heading = htmlTab.getAttribute('data-tabScrollHeading');
+          const tabScope = new TabScrollTab();
+          tabScope.active = htmlTab.classList.contains('active');
+          tabScope.tabScrollTitle = heading ? heading : htmlTab.textContent.trim();
+          return acu.concat();
+        }, []);
       } else {
-        $scope.dropdownTabs = [];
+        this.dropdownTabs = [];
       }
 
-      $scope.reCalcSides();
+      this.reCalcSides();
     } else {
-      $scope.dropdownTabs = [];
+      this.dropdownTabs = [];
     }
   }
 
-  scrollTabIntoView(arg) {
-
-  }
-
-  scrollTo(element, change, duration, callback, isLinear) {
-    var start = element.scrollLeft;
-    var increment = 20;
-    var position = 0;
-
-    var animateScroll = function (elapsedTime) {
-      elapsedTime += increment;
-      if (isLinear === true) {
-        position = $scope.linearTween(elapsedTime, start, change, duration);
-      } else {
-        position = $scope.easeInOutQuad(elapsedTime, start, change, duration);
-      }
-      element.scrollLeft = position;
-      if (elapsedTime < duration) {
-        setTimeout(function () {
-          animateScroll(elapsedTime);
-        }, increment);
-      } else {
-        callback();
-      }
-    };
-
-    animateScroll(0);
-  }
-
   /**
-   * @todo use angular animations ?
-   * @param currentTime
-   * @param start
-   * @param change
-   * @param duration
+   * scrollTabIntoView() - scroll the selected tab into center of view.
+   * scrollTabIntoView(number) - if you want to scroll to a specific tab index
+   * @param tabIndex tab index to scroll to
    */
-  linearTween(currentTime, start, change, duration) {
-    return change * currentTime / duration + start;
-  }
-
-  /**
-   * @todo use angular animations ?
-   * @param currentTime
-   * @param start
-   * @param change
-   * @param duration
-   */
-  easeInOutQuad(currentTime, start, change, duration) {
-    currentTime /= duration / 2;
-    if (currentTime < 1) {
-      return change / 2 * currentTime * currentTime + start;
+  scrollTabIntoView(tabIndex?: number) {
+    if (!this.tabContainer || this.hideButtons) {
+      return;
     }
-    currentTime--;
-    return -change / 2 * (currentTime * (currentTime - 2) - 1) + start;
+    let tabToScroll;
+
+    // first we find the tab element.
+    if (tabIndex) { // scroll tab index into view
+      const allTabs = this.getAllTabs();
+      if (allTabs.length > tabIndex) { // only if its really exist
+        tabToScroll = allTabs[tabIndex];
+      }
+    } else { // scroll selected tab into view
+      const activeTab = this.tabContainer.querySelector('li.active');
+      if (activeTab) {
+        tabToScroll = activeTab;
+      }
+    }
+
+    // now let's scroll it into view.
+    if (tabToScroll) {
+      const position = this.getHtmlElementPosition(tabToScroll, this.tabContainer);
+      let dif: number;
+      if (position.left - this.leftScrollAdditionPixels < 0) {
+        dif = position.left - 20 - this.leftScrollAdditionPixels;
+        this.animation.scrollTo(this.tabContainer, dif, 700, () => {
+          this.reCalcSides();
+        });
+      } else if (position.right > this.tabContainer.offsetWidth) {
+        dif = position.right - this.tabContainer.offsetWidth + 20;
+        this.animation.scrollTo(this.tabContainer, dif, 700, () => {
+          this.reCalcSides();
+        });
+      }
+    }
   }
 
-  onWindowResize() {
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event) {
     // delay for a bit to avoid running lots of times.
     clearTimeout(this.winResizeTimeout);
-    this.winResizeTimeout = setTimeout(function () {
+    this.winResizeTimeout = setTimeout(() => {
       this.reCalcAll();
       this.scrollTabIntoView();
-      this.$apply();
+      // this.$apply(); <- cdr
     }, 250);
   }
 
@@ -361,144 +383,93 @@ export class TabScrollComponent implements OnInit, OnDestroy {
     this.isHolding = false;
 
     if (this.mouseDownInterval) {
-      $interval.cancel(this.mouseDownInterval);
+      clearInterval(this.mouseDownInterval);
       this.mouseDownInterval = null;
     }
   }
 
   /**
-   * @TODO replace $timeout with something from rxjs
-   * @TODO Check angular-ui-tab-scroll and check what tabContainer is
-   * @param direction
-   * @param event
+   * Init mouseDownInterval
+   * @param realScroll amount of pixels to scroll to
+   * @param event Button click Event
    */
-  scrollButtonDown(direction, event) {
-    event.stopPropagation();
-    this.isHolding = true;
-    const realScroll = direction === 'left' ? 0 - this.scrollByPixels : this.scrollByPixels;
-    this.scrollTo(this.tabContainer, realScroll, 150, function () {
-      $timeout(function () {
-        this.reCalcSides();
-      });
-    }, true)
-  }
-
-  initMouseDownInterval() {
-    mouseDownInterval = $interval(function() {
-
-      if($scope.isHolding) {
-        $scope.scrollTo($scope.tabContainer, realScroll, 150, function(){
-          $timeout(function(){
-            $scope.reCalcSides();
-          });
+  initMouseDownInterval(realScroll, event) {
+    this.mouseDownInterval = setInterval(() => {
+      if (this.isHolding) {
+        this.animation.scrollTo(this.tabContainer, realScroll, 150, () => {
+          this.reCalcSides();
         }, true);
 
-        if(event.target.disabled) {
-          $scope.cancelMouseDownInterval();
+        if (event.target.disabled) {
+          this.cancelMouseDownInterval();
         }
       }
     }, 100);
   }
 
+  reCalcSides() {
+    if (!this.tabContainer || this.hideButtons) {
+      return;
+    }
+    this.disableRight = this.tabContainer.scrollLeft >= this.tabContainer.scrollWidth - this.tabContainer.offsetWidth;
+    this.disableLeft = this.tabContainer.scrollLeft <= 0;
 
-  scrollButtonUp = function() {
-    $scope.cancelMouseDownInterval();
-  }
-
-  activateTab = function(tab) {
-    if(tab.disabled)return;
-    tab.select();
-    $timeout(function () {
-      $scope.scrollTabIntoView();
-    });
-  }
-
-
-  reCalcSides = function() {
-    if(!$scope.tabContainer || $scope.hideButtons)return;
-    $scope.disableRight = $scope.tabContainer.scrollLeft >= $scope.tabContainer.scrollWidth - $scope.tabContainer.offsetWidth;
-    $scope.disableLeft = $scope.tabContainer.scrollLeft <= 0;
-
-    if($scope.userShowTooltips){
-      $scope.reCalcTooltips();
+    if (this.userShowTooltips) {
+      this.reCalcTooltips();
     }
   }
 
-  reCalcTooltips = function(){
-    if(!$scope.tabContainer || $scope.hideButtons)return;
-    var rightTooltips = [];
-    var leftTooltips = [];
+  reCalcTooltips() {
+    if (!this.tabContainer || this.hideButtons) {
+      return;
+    }
+    const rightTooltips = [];
+    const leftTooltips = [];
 
-    var allTabs = $scope.tabContainer.querySelectorAll('ul.nav-tabs > li');
-    angular.forEach(allTabs, function(tab) {
+    this.getAllTabs().forEach((htmlTab: HTMLElement) => {
+      const position = this.getHtmlElementPosition(htmlTab, this.tabContainer);
+      const heading = htmlTab.getAttribute('data-tabScrollHeading');
+      const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
 
-      var rightPosition = parseInt(tab.getBoundingClientRect().left + tab.getBoundingClientRect().width - $scope.tabContainer.getBoundingClientRect().left);
-      var leftPosition = tab.getBoundingClientRect().left - $scope.tabContainer.getBoundingClientRect().left;
-      var heading = tab.getAttribute("data-tabScrollHeading");
-      var ignore = tab.getAttribute("data-tabScrollIgnore");
-
-      if(rightPosition > $scope.tabContainer.offsetWidth && !ignore ) {
-        if(heading) {
-          rightTooltips.push(heading)
-        } else if (tab.textContent)rightTooltips.push(tab.textContent);
+      if (position.right > this.tabContainer.offsetWidth && !ignore) {
+        if (heading) {
+          rightTooltips.push(heading);
+        } else if (htmlTab.textContent) {
+          rightTooltips.push(htmlTab.textContent);
+        }
       }
 
-      if (leftPosition < 0 && !ignore ) {
-        if(heading) {
-          leftTooltips.push(heading)
-        } else if (tab.textContent)leftTooltips.push(tab.textContent);
+      if (position.left < 0 && !ignore) {
+        if (heading) {
+          leftTooltips.push(heading);
+        } else if (htmlTab.textContent) {
+          leftTooltips.push(htmlTab.textContent);
+        }
       }
 
     });
 
-    var rightTooltipsHtml = rightTooltips.join('<br>');
-    $scope.tooltipRightHtml = $sce.trustAsHtml(rightTooltipsHtml);
-
-    var leftTooltipsHtml = leftTooltips.join('<br>');
-    $scope.tooltipLeftHtml = $sce.trustAsHtml(leftTooltipsHtml);
+    this.tooltipRightHtml = rightTooltips.join('<br/>');
+    this.tooltipLeftHtml = leftTooltips.join('<br/>');
   }
 
-
-  scrollTabIntoView = function(arg){
-    if(!$scope.tabContainer || $scope.hideButtons)return;
-
-    var argInt = parseInt(arg);
-    var tabToScroll;
-
-    // first we find the tab element.
-    if(argInt) { // scroll tab index into view
-      var allTabs = $scope.tabContainer.querySelectorAll('ul.nav-tabs > li');
-      if(allTabs.length > argInt) { // only if its really exist
-        tabToScroll = allTabs[argInt];
-      }
-    } else { // scroll selected tab into view
-      var activeTab = $scope.tabContainer.querySelector('li.active');
-      if(activeTab) {
-        tabToScroll = activeTab;
-      }
-    }
-
-    // now let's scroll it into view.
-    if(tabToScroll) {
-      var rightPosition = parseInt(tabToScroll.getBoundingClientRect().left + tabToScroll.getBoundingClientRect().width - $scope.tabContainer.getBoundingClientRect().left);
-      var leftPosition = tabToScroll.getBoundingClientRect().left - $scope.tabContainer.getBoundingClientRect().left;
-      if (leftPosition - $scope.leftScrollAdditionPixels < 0) {
-        var dif = leftPosition - 20 - $scope.leftScrollAdditionPixels;
-        $scope.scrollTo($scope.tabContainer, dif, 700, function(){
-          $timeout(function(){
-            $scope.reCalcSides();
-          });
-        });
-      } else if(rightPosition > $scope.tabContainer.offsetWidth){
-        var dif = rightPosition - $scope.tabContainer.offsetWidth + 20;
-        $scope.scrollTo($scope.tabContainer, dif, 700, function(){
-          $timeout(function(){
-            $scope.reCalcSides();
-          });
-        });
-      }
-    }
+  /**
+   * Returns all tabs as array oh html elements
+   */
+  private getAllTabs(): HTMLElement[] {
+    const allTabs = this.tabContainer.querySelectorAll('ul.nav-tabs > li');
+    return <HTMLElement[]>(Array.from(allTabs));
   }
 
+  /**
+   * Returns left and right position of element inside parent
+   * @param el tested element
+   * @param parent parent of tested element
+   */
+  private getHtmlElementPosition(el: HTMLElement, parent: HTMLElement): { right: number, left: number } {
+    const right = el.getBoundingClientRect().left + el.getBoundingClientRect().width - parent.getBoundingClientRect().left;
+    const left = el.getBoundingClientRect().left - parent.getBoundingClientRect().left;
+    return {right, left};
+  }
 }
 

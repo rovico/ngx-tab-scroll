@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "build:lib": "ng build ngx-tab-scroll",
+    "test:lib": "ng test ngx-tab-scroll",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
