@@ -31,8 +31,8 @@ export class TabScrollConfigService {
 export class TabScrollConfig {
   showDropDown = true;
   showTooltips = true;
-  tooltipLeftPlacement = 'right';
-  tooltipRightPlacement = 'left';
+  tooltipLeftPlacement = 'top';
+  tooltipRightPlacement = 'top';
   scrollBy = 50;
   autoRecalculate = false;
   leftScrollAddition = 0;

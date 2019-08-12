@@ -6,7 +6,7 @@ import {
   HostListener,
   Input,
   OnDestroy,
-  OnInit, Renderer2,
+  OnInit,
   TemplateRef,
   ViewChild
 } from '@angular/core';
@@ -59,16 +59,22 @@ export class TabScrollAPI {
     <div class="ui-tabs-scrollable" [ngClass]="{'show-drop-down': !hideDropDown}">
       <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
-              [ngbTooltip]="tooltipLeftTemplate"></button>
+              [ngbTooltip]="tooltipLeftTemplate" [disableTooltip]="!userShowTooltips">
+        <i class="ts-icon-chevron-left"></i>
+      </button>
       <div #spacer class="spacer" [ngClass]="{'hidden-buttons': hideButtons}">
         <ng-content></ng-content>
       </div>
       <button type="button" (mousedown)="scrollButtonDown('right', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableRight" class="btn nav-button right-nav-button" [placement]="tooltipRightDirection"
-              [ngbTooltip]="tooltipRightTemplate"></button>
+              [ngbTooltip]="tooltipRightTemplate" [disableTooltip]="!userShowTooltips">
+        <i class="ts-icon-chevron-right"></i>
+      </button>
 
       <div class="btn-group" [ngClass]="[dropDownClass || '']" ngbDropdown container="body" [hidden]="hideDropDown">
-        <button type="button" class="btn" ngbDropdownToggle></button>
+        <button type="button" class="btn" ngbDropdownToggle>
+          <i class="ts-icon-chevron-down"></i>
+        </button>
         <ul class="dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
           <li [ngClass]="dropDownHeaderClass">
             <ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container>
@@ -76,15 +82,14 @@ export class TabScrollAPI {
           <li role="menuitem" *ngFor="let tab of dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
               (click)="activateTab(tab)">
             <a href><span class="dropDownTabActiveMark"
-                          [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}"></span>{{tab.tabScrollTitle}}</a>
+                          [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}">
+              <i class="ts-icon-check"></i>
+            </span>{{tab.tabScrollTitle}}</a>
           </li>
         </ul>
       </div>
     </div>
   `,
-  styleUrls: [
-    './tab-scroll.scss'
-  ],
   providers: [TabScrollAnimationService]
 })
 export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -200,8 +205,12 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   tooltipRightDirection;
 
+  /**
+   * Enable tooltips when showTooltips is true or this.config.getConfig().showTooltips is true
+   */
+  userShowTooltips: boolean;
+
   private userShowDropDown: boolean;
-  private userShowTooltips: boolean;
   private scrollByPixels: number;
   private leftScrollAdditionPixels: number;
   private mouseDownInterval: any;
@@ -211,8 +220,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private config: TabScrollConfigService,
-    private animation: TabScrollAnimationService,
-    private renderer: Renderer2) {
+    private animation: TabScrollAnimationService
+  ) {
     this.api = new TabScrollAPI(this);
     this.dropdownTabs = [];
     this.hideButtons = true;
@@ -226,8 +235,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.tooltipLeftDirection = this.tooltipLeftPlacement ? this.tooltipLeftPlacement : this.config.getConfig().tooltipLeftPlacement;
     this.tooltipRightDirection = this.tooltipRightPlacement ? this.tooltipRightPlacement : this.config.getConfig().tooltipRightPlacement;
-    this.userShowDropDown = this.showDropDown !== undefined ? this.showDropDown === true : this.config.getConfig().showDropDown;
-    this.userShowTooltips = this.showTooltips !== undefined ? this.showTooltips === true : this.config.getConfig().showTooltips === true;
+    this.userShowDropDown = this.showDropDown !== undefined ? this.showDropDown : this.config.getConfig().showDropDown;
+    this.userShowTooltips = this.showTooltips !== undefined ? this.showTooltips : this.config.getConfig().showTooltips;
     this.scrollByPixels = this.scrollBy ? this.scrollBy : this.config.getConfig().scrollBy;
     this.leftScrollAdditionPixels = this.leftScrollAddition ? this.leftScrollAddition : this.config.getConfig().leftScrollAddition;
   }

@@ -8,7 +8,7 @@
     "build:demo": "ng build demo",
     "build:lib": "ng build ngx-tab-scroll",
     "test:lib": "ng test ngx-tab-scroll",
-    "lib:copy:styles": "cpx \"projects/ngx-tab-scroll/src/lib/tab-scroll-flat.scss\" \"dist/ngx-tab-scroll\"",
+    "lib:copy:styles": "cpx \"projects/ngx-tab-scroll/src/lib/*.scss\" \"dist/ngx-tab-scroll\"",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
