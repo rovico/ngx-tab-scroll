@@ -344,15 +344,15 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
     let tabToScroll;
+    const allTabs = this.getAllTabs();
 
     // first we find the tab element.
     if (tabIndex) { // scroll tab index into view
-      const allTabs = this.getAllTabs();
       if (allTabs.length > tabIndex) { // only if its really exist
         tabToScroll = allTabs[tabIndex];
       }
     } else { // scroll selected tab into view
-      const activeTab = this.tabContainer.querySelector('li.active');
+      const activeTab = allTabs.find((htmlTab: HTMLElement) => htmlTab.firstElementChild.classList.contains('active'));
       if (activeTab) {
         tabToScroll = activeTab;
       }
