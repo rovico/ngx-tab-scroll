@@ -60,14 +60,14 @@ export class TabScrollAPI {
       <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
               [ngbTooltip]="tooltipLeftTemplate"></button>
-      <div #spacer class="spacer" ngClass="{'hidden-buttons': hideButtons}">
+      <div #spacer class="spacer" [ngClass]="{'hidden-buttons': hideButtons}">
         <ng-content></ng-content>
       </div>
       <button type="button" (mousedown)="scrollButtonDown('right', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableRight" class="btn nav-button right-nav-button" [placement]="tooltipRightDirection"
               [ngbTooltip]="tooltipRightTemplate"></button>
 
-      <div class="btn-group" [ngClass]="[dropDownClass]" ngbDropdown container="body" [hidden]="hideDropDown">
+      <div class="btn-group" [ngClass]="[dropDownClass || '']" ngbDropdown container="body" [hidden]="hideDropDown">
         <button type="button" class="btn" ngbDropdownToggle></button>
         <ul class="dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
           <li [ngClass]="dropDownHeaderClass">
@@ -83,8 +83,7 @@ export class TabScrollAPI {
     </div>
   `,
   styleUrls: [
-    './tab-scroll.scss',
-    './tab-scroll-flat.scss'
+    './tab-scroll.scss'
   ],
   providers: [TabScrollAnimationService]
 })

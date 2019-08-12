@@ -15,7 +15,11 @@ import { NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootst
     NgbTabsetModule,
     NgbDropdownModule,
     NgbTooltipModule,
-    TabScrollModule
+    TabScrollModule.forRoot({
+      autoRecalculate: true,
+      showDropDown: true,
+      showTooltips: false
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

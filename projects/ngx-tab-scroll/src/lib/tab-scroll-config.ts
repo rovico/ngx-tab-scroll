@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
 export interface TabScrollConfigInterface {
-  showDropDown: boolean;
-  showTooltips: boolean;
-  tooltipLeftPlacement: string;
-  tooltipRightPlacement: string;
-  scrollBy: number;
-  autoRecalculate: boolean;
-  leftScrollAddition: number;
+  showDropDown?: boolean;
+  showTooltips?: boolean;
+  tooltipLeftPlacement?: string;
+  tooltipRightPlacement?: string;
+  scrollBy?: number;
+  autoRecalculate?: boolean;
+  leftScrollAddition?: number;
 }
 
 export class TabScrollConfigService {
@@ -29,11 +29,11 @@ export class TabScrollConfigService {
   providedIn: 'root'
 })
 export class TabScrollConfig {
-  showDropDown: true;
-  showTooltips: true;
-  tooltipLeftPlacement: 'right';
-  tooltipRightPlacement: 'left';
-  scrollBy: 50;
-  autoRecalculate: false;
-  leftScrollAddition: 0;
+  showDropDown = true;
+  showTooltips = true;
+  tooltipLeftPlacement = 'right';
+  tooltipRightPlacement = 'left';
+  scrollBy = 50;
+  autoRecalculate = false;
+  leftScrollAddition = 0;
 }

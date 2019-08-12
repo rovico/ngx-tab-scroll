@@ -10,7 +10,7 @@ export class AppComponent {
 
   @ViewChild(forwardRef(() => TabScrollComponent)) tabScroll: TabScrollComponent;
 
-  tabs: {heading: string, content: string}[];
+  tabs: {heading: string, content: string}[] = [];
 
   addTab() {
     this.tabs.push({
