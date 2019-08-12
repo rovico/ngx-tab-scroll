@@ -3,8 +3,8 @@ ngx-tab-scroll
 
 A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-bootstrap.github.io/#/components/tabset/examples).
 
-[![npm version](https://img.shields.io/npm/v/angular-ui-tab-scroll.svg?style=flat-square)](https://www.npmjs.com/package/ngx-tab-scroll)
-[![npm downloads](https://img.shields.io/npm/dm/angular-ui-tab-scroll.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ngx-tab-scroll&from=2019-08-01)
+[![npm version](https://img.shields.io/npm/v/ngx-tab-scroll.svg?style=flat-square)](https://www.npmjs.com/package/ngx-tab-scroll)
+[![npm downloads](https://img.shields.io/npm/dm/ngx-tab-scroll.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ngx-tab-scroll&from=2019-08-01)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 
 ### Usage
@@ -28,7 +28,7 @@ A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-
     
   ```
     
-* Import the angular npm module:
+* Import angular npm module:
    ```typescript
    import { TabScrollModule } from 'ngx-tab-scroll';
    ```
