@@ -7,21 +7,19 @@ $header-height: 42px;
     &:not(.hidden-buttons) {
       margin-left: $button-width;
       margin-right: $button-width;
-      > div:first-child {
-        > .nav-tabs {
-          > li {
-            &:first-child.active a,
-            &:first-child a:hover {
-              border-top-left-radius: 0;
-              border-left: 1px solid transparent;
-            }
-            &:last-child.active a,
-            &:last-child a,
-            &:last-child a:hover {
-              border-top-right-radius: 0;
-              border-right: 1px solid transparent;
-              margin-right: -1px;
-            }
+      ngb-tabset {
+         > .nav-tabs > li {
+          &:first-child.active a,
+          &:first-child a:hover {
+            border-top-left-radius: 0;
+            border-left: 1px solid transparent;
+          }
+          &:last-child.active a,
+          &:last-child a,
+          &:last-child a:hover {
+            border-top-right-radius: 0;
+            border-right: 1px solid transparent;
+            margin-right: -1px;
           }
         }
         > .tab-content {
@@ -30,8 +28,10 @@ $header-height: 42px;
         }
       }
     }
-    > div:first-child {
+    ngb-tabset {
       > .nav-tabs {
+        display: block;
+        flex-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
         border-bottom: 0;
@@ -109,10 +109,8 @@ $header-height: 42px;
     > .spacer {
       &:not(.hidden-buttons) {
         margin-right: calc(#{$button-width} + #{$button-width});
-        > div:first-child {
-          > .tab-content {
-            margin-right: calc(-#{$button-width} - #{$button-width});
-          }
+        ngb-tabset > .tab-content {
+          margin-right: calc(-#{$button-width} - #{$button-width});
         }
       }
     }
@@ -125,23 +123,18 @@ $header-height: 42px;
   }
 }
 
-.dropdown-menu {
-  > li {
-    > a {
-      .dropDownTabActiveMark:before {
-        font-family: 'Glyphicons Halflings';
-        content: '\e013';
-        padding-right: 10px;
-        font-size: 12px;
-      }
-    }
-  }
+.dropdown-menu > li > a .dropDownTabActiveMark:before {
+  font-family: 'Glyphicons Halflings';
+  content: '\e013';
+  padding-right: 10px;
+  font-size: 12px;
 }
 
 /*make the tabs content be height 100%*/
 .ui-tabs-scrollable > .spacer {
   height: 100%;
-  > div:first-child {
+  ngb-tabset {
+    display: block;
     height: 100%;
     > .tab-content {
       height: 100%;

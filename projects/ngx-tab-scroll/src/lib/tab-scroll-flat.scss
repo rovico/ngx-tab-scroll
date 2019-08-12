@@ -10,38 +10,32 @@ $active-text-color: #000;
 $active-border-color: #999;
 $active-border-radius: 3px;
 
-.ui-tabs-scrollable {
+body .ui-tabs-scrollable {
   position: relative;
 
   > .spacer {
     &:not(.hidden-buttons) {
       margin-left: 0;
       margin-right: calc(#{$button-width} + #{$button-width});
-      > div:first-child {
-        > .tab-content {
-          margin-left: 0px;
-          margin-right: calc(-#{$button-width} - #{$button-width});
+      > div:first-child > .tab-content {
+        margin-left: 0;
+        margin-right: calc(-#{$button-width} - #{$button-width});
+      }
+    }
+    &.hidden-buttons ngb-tabset > .nav-tabs {
+      > li:last-child {
+        > a {
+          border-right-color: $border-color;
+        }
+        &.active > a {
+          border-right-color: $active-border-color;
         }
       }
     }
-    &.hidden-buttons {
-      > div:first-child {
-        > .nav-tabs {
-          > li:last-child {
-            > a {
-              border-right-color: $border-color;
-            }
-            &.active {
-              > a {
-                border-right-color: $active-border-color;
-              }
-            }
-          }
-        }
-      }
-    }
-    > div:first-child {
+    ngb-tabset {
       > .nav-tabs {
+        display: block;
+        flex-wrap: nowrap;
         white-space: nowrap;
         overflow: hidden;
         border: none;
@@ -57,33 +51,23 @@ $active-border-radius: 3px;
               background-color: $active-background-color;
               color: $active-text-color;
             }
-            & + li {
-              > a {
-                border-left-color: $not-active-background-color;
-              }
-            }
-            & + li {
-              > a:hover {
+            & + li > a {
+              border-left-color: $not-active-background-color;
+              &:hover {
                 border-left-color: $not-active-hover-color;
               }
             }
           }
-          &:not(.active) {
-            > a {
-              border-bottom-color: $active-border-color;
-              &:hover {
-                background-color: $not-active-hover-color;
-              }
+          &:not(.active) > a {
+            border-bottom-color: $active-border-color;
+            &:hover {
+              background-color: $not-active-hover-color;
             }
           }
-          &.disabled {
-            &:not(.active) {
-              > a {
-                color: #9d9d9d;
-                &:hover {
-                  background-color: $not-active-background-color;
-                }
-              }
+          &.disabled:not(.active) > a {
+            color: #9d9d9d;
+            &:hover {
+              background-color: $not-active-background-color;
             }
           }
           > a {
@@ -100,8 +84,6 @@ $active-border-radius: 3px;
             color: $not-active-text-color;
           }
         }
-
-
       }
       > .tab-content {
         margin-top: -1px;
@@ -111,7 +93,7 @@ $active-border-radius: 3px;
   }
 
   > .nav-button {
-    &:hover, &:active{
+    &:hover, &:active {
       background-color: #e5e5e5;
     }
     &:before {
@@ -119,10 +101,8 @@ $active-border-radius: 3px;
       color: #8c8c8c;
       font-size: 10px;
     }
-    &:disabled {
-      &:before {
-        color: #c5c5c5;
-      }
+    &:disabled:before {
+      color: #c5c5c5;
     }
     position: absolute;
     width: $button-width;
@@ -172,31 +152,25 @@ $active-border-radius: 3px;
       z-index: 10;
       border-radius: 0;
       border-bottom-color: $active-border-color;
-      &:before{
+      &:before {
         font-family: 'Glyphicons Halflings';
         content: '\e114';
         font-size: 10px;
       }
     }
   }
-  &.show-drop-down {
-    > .spacer {
-      &:not(.hidden-buttons) {
-        margin-right: calc(#{$button-width} + #{$button-width} + #{$button-width});
-        > div:first-child {
-          > .tab-content {
-            margin-right: calc(-#{$button-width} - #{$button-width} - #{$button-width});
-          }
-        }
-      }
+  &.show-drop-down > .spacer:not(.hidden-buttons) {
+    margin-right: calc(#{$button-width} + #{$button-width} + #{$button-width});
+    ngb-tabset > .tab-content {
+      margin-right: calc(-#{$button-width} - #{$button-width} - #{$button-width});
     }
-    > .nav-button {
-      &.right-nav-button {
-        right: $button-width;
-      }
-      &.left-nav-button {
-        right: calc(#{$button-width} + #{$button-width})
-      }
+  }
+  > .nav-button {
+    &.right-nav-button {
+      right: $button-width;
+    }
+    &.left-nav-button {
+      right: calc(#{$button-width} + #{$button-width})
     }
   }
 }
@@ -232,7 +206,8 @@ $active-border-radius: 3px;
 /*make the tabs content be height 100%*/
 .ui-tabs-scrollable > .spacer {
   height: 100%;
-  > div:first-child {
+  ngb-tabset {
+    display: block;
     height: 100%;
     > .tab-content {
       height: 100%;
