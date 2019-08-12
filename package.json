@@ -4,11 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve demo",
-    "build": "yarn run build:lib && yarn run lib:copy:styles",
+    "build": "yarn run build:lib && yarn run lib:copy:styles && yarn run lib:copy:readme",
     "build:demo": "ng build demo",
     "build:lib": "ng build ngx-tab-scroll",
     "test:lib": "ng test ngx-tab-scroll",
     "lib:copy:styles": "cpx \"projects/ngx-tab-scroll/src/lib/*.scss\" \"dist/ngx-tab-scroll\"",
+    "lib:copy:readme": "cpx \"README.md\" \"dist/ngx-tab-scroll\"",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
