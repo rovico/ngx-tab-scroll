@@ -15,6 +15,7 @@ import { NgbTab, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { TabScrollAnimationService } from './tab-scroll-animation.service';
 
 export class TabScrollTab {
+  id: string;
   active: boolean;
   disabled: boolean;
   tabScrollTitle: string;
@@ -81,10 +82,10 @@ export class TabScrollAPI {
           </li>
           <li role="menuitem" *ngFor="let tab of dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
               (click)="activateTab(tab)">
-            <a href><span class="dropDownTabActiveMark"
+            <span class="dropDownTabActiveMark"
                           [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}">
               <i class="ts-icon-check"></i>
-            </span>{{tab.tabScrollTitle}}</a>
+            </span>{{tab.tabScrollTitle}}
           </li>
         </ul>
       </div>
@@ -307,20 +308,22 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isButtonsVisible = !this.hideButtons;
 
     if (!this.hideButtons) {
-
       if (!this.hideDropDown) {
-        this.dropdownTabs = [];
-        this.dropdownTabs = this.getAllTabs().reduce((acu, htmlTab: HTMLElement) => {
-          const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
-          if (ignore) {
-            return acu;
-          }
-          const heading = htmlTab.getAttribute('data-tabScrollHeading');
-          const tabScope = new TabScrollTab();
-          tabScope.active = htmlTab.classList.contains('active');
-          tabScope.tabScrollTitle = heading ? heading : htmlTab.textContent.trim();
-          return acu.concat();
-        }, []);
+        window.setTimeout(() => {
+          this.dropdownTabs = this.getAllTabs().reduce((acu, htmlTab: HTMLElement) => {
+            const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
+            if (ignore) {
+              return acu;
+            }
+            const heading = htmlTab.getAttribute('data-tabScrollHeading');
+            const tabScope = new TabScrollTab();
+            tabScope.id = htmlTab.firstElementChild.getAttribute('id');
+            tabScope.active = htmlTab.firstElementChild.classList.contains('active');
+            tabScope.tabScrollTitle = heading ? heading : htmlTab.textContent.trim();
+
+            return acu.concat([tabScope]);
+          }, []);
+        });
       } else {
         this.dropdownTabs = [];
       }

@@ -26,9 +26,9 @@ $active-border-radius: 3px;
       > li:last-child {
         > a {
           border-right-color: $border-color;
-        }
-        &.active > a {
-          border-right-color: $active-border-color;
+          &.active {
+            border-right-color: $active-border-color;
+          }
         }
       }
     }
@@ -43,33 +43,6 @@ $active-border-radius: 3px;
           float: none;
           display: table-cell;
           margin: 0;
-          &.active {
-            > a {
-              border-radius: $active-border-radius $active-border-radius 0 0;
-              border-color: $active-border-color;
-              border-bottom-color: transparent;
-              background-color: $active-background-color;
-              color: $active-text-color;
-            }
-            & + li > a {
-              border-left-color: $not-active-background-color;
-              &:hover {
-                border-left-color: $not-active-hover-color;
-              }
-            }
-          }
-          &:not(.active) > a {
-            border-bottom-color: $active-border-color;
-            &:hover {
-              background-color: $not-active-hover-color;
-            }
-          }
-          &.disabled:not(.active) > a {
-            color: #9d9d9d;
-            &:hover {
-              background-color: $not-active-background-color;
-            }
-          }
           > a {
             line-height: $header-height;
             height: $header-height;
@@ -82,7 +55,35 @@ $active-border-radius: 3px;
             padding: 0 15px;
             margin: 0;
             color: $not-active-text-color;
+
+            &.active {
+              border-radius: $active-border-radius $active-border-radius 0 0;
+              border-color: $active-border-color;
+              border-bottom-color: transparent;
+              background-color: $active-background-color;
+              color: $active-text-color;
+            }
+
+            &:not(.active) {
+              border-bottom-color: $active-border-color;
+              &:hover {
+                background-color: $not-active-hover-color;
+              }
+            }
           }
+          //& + li > a {
+          //  border-left-color: $not-active-background-color;
+          //  &:hover {
+          //    border-left-color: $not-active-hover-color;
+          //  }
+          //}
+          &.disabled > a:not(.active) {
+            color: #9d9d9d;
+            &:hover {
+              background-color: $not-active-background-color;
+            }
+          }
+
         }
       }
       > .tab-content {
@@ -173,22 +174,21 @@ $active-border-radius: 3px;
   min-width: 0;
   box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
   > li {
-    > a {
-      padding: 3px 15px;
-      > .dropDownTabActiveMark i {
-        padding-right: 7px;
-        font-size: 10px;
-        color: #777;
-      }
+    padding: 3px 15px;
+    cursor: pointer;
+    > .dropDownTabActiveMark i {
+      color: #777;
+      display: inline-block;
+      font-size: 10px;
+      padding-right: 7px;
+      width: 10px;
     }
     &.active {
-      > a {
+      color: inherit;
+      background-color: inherit;
+      &:hover {
         color: inherit;
-        background-color: inherit;
-        &:hover {
-          color: inherit;
-          background-color: #f5f5f5;
-        }
+        background-color: #f5f5f5;
       }
     }
   }
@@ -212,7 +212,7 @@ $active-border-radius: 3px;
 }
 
 i[class^=ts-icon] {
-  display: block;
+  display: inline-block;
   width: 100%;
   margin-top: 10px;
   margin-left: 6px;
