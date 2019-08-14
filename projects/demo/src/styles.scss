@@ -2,8 +2,8 @@
 @import "~bootstrap/scss/bootstrap-reboot";
 @import "~bootstrap/scss/bootstrap";
 
-@import "../../../dist/ngx-tab-scroll/tab-scroll-theme-bootstrap";
-// @import "../../../dist/ngx-tab-scroll/tab-scroll-theme-flatten";
+// @import "../../../dist/ngx-tab-scroll/tab-scroll-theme-bootstrap";
+@import "../../../dist/ngx-tab-scroll/tab-scroll-theme-flatten";
 
 .tabContent{
   background-color: #FBFBFB;
@@ -19,89 +19,89 @@
   font-size: 10px;
 }
 
-//.ui-tabs-scrollable {
-//  position: relative;
-//
-//  > .spacer {
-//    &.hidden-buttons app-tabset-like > .nav-tabs {
-//      > li:last-child {
-//        > a {
-//          border-right-color: $border-color;
-//          &.active {
-//            border-right-color: $active-border-color;
-//          }
-//        }
-//      }
-//    }
-//    app-tabset-like {
-//      > .nav-tabs {
-//        display: block;
-//        flex-wrap: nowrap;
-//        white-space: nowrap;
-//        overflow: hidden;
-//        border: none;
-//        > li {
-//          float: none;
-//          display: table-cell;
-//          margin: 0;
-//          > a {
-//            line-height: $header-height;
-//            height: $header-height;
-//            font-size: 12px;
-//            overflow: hidden;
-//            background-color: $not-active-background-color;
-//            border: 1px solid $border-color;
-//            border-right-color: transparent;
-//            border-radius: 0;
-//            padding: 0 15px;
-//            margin: 0;
-//            color: $not-active-text-color;
-//
-//            &.active {
-//              border-radius: $active-border-radius $active-border-radius 0 0;
-//              border-color: $active-border-color;
-//              border-bottom-color: transparent;
-//              background-color: $active-background-color;
-//              color: $active-text-color;
-//            }
-//
-//            &:not(.active) {
-//              border-bottom-color: $active-border-color;
-//              &:hover {
-//                background-color: $not-active-hover-color;
-//              }
-//            }
-//          }
-//          &.disabled > a:not(.active) {
-//            color: #9d9d9d;
-//            &:hover {
-//              background-color: $not-active-background-color;
-//            }
-//          }
-//
-//        }
-//      }
-//      > .tab-content {
-//        margin-top: -1px;
-//        border-top: 1px solid $active-border-color;
-//      }
-//    }
-//  }
-//}
-//
-///*make the tabs content be height 100%*/
-//.ui-tabs-scrollable > .spacer {
-//  app-tabset-like {
-//    display: block;
-//    height: 100%;
-//    > .tab-content {
-//      height: 100%;
-//      > .active {
-//        height: 100%;
-//        overflow: auto;
-//      }
-//    }
-//  }
-//}
-//
+.ui-tabs-scrollable {
+  position: relative;
+
+  > .spacer {
+    &.hidden-buttons app-tabset-like > .nav-tabs {
+      > li:last-child {
+        > a {
+          border-right-color: $border-color;
+          &.active {
+            border-right-color: $active-border-color;
+          }
+        }
+      }
+    }
+    app-tabset-like {
+      > .nav-tabs {
+        display: block;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow: hidden;
+        border: none;
+        > li {
+          float: none;
+          display: table-cell;
+          margin: 0;
+          > a {
+            line-height: $header-height;
+            height: $header-height;
+            font-size: 12px;
+            overflow: hidden;
+            background-color: $not-active-background-color;
+            border: 1px solid $border-color;
+            border-right-color: transparent;
+            border-radius: 0;
+            padding: 0 15px;
+            margin: 0;
+            color: $not-active-text-color;
+
+            &.active {
+              border-radius: $active-border-radius $active-border-radius 0 0;
+              border-color: $active-border-color;
+              border-bottom-color: transparent;
+              background-color: $active-background-color;
+              color: $active-text-color;
+            }
+
+            &:not(.active) {
+              border-bottom-color: $active-border-color;
+              &:hover {
+                background-color: $not-active-hover-color;
+              }
+            }
+          }
+          &.disabled > a:not(.active) {
+            color: #9d9d9d;
+            &:hover {
+              background-color: $not-active-background-color;
+            }
+          }
+
+        }
+      }
+      > .tab-content {
+        margin-top: -1px;
+        border-top: 1px solid $active-border-color;
+      }
+    }
+  }
+}
+
+/*make the tabs content be height 100%*/
+.ui-tabs-scrollable > .spacer {
+  app-tabset-like {
+    display: block;
+    height: 100%;
+    > .tab-content {
+      height: 100%;
+      > .active {
+        height: 100%;
+        overflow: auto;
+      }
+    }
+  }
+}
+
 
