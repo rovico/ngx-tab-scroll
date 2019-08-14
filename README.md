@@ -27,6 +27,12 @@ A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-
   @import '~ngx-tab-scroll/tab-scroll-theme-bootstrap';
     
   ```
+  
+  And icons
+  
+  ```scss
+  @import '~ngx-tab-scroll/tab-scroll-icons';
+  ```
     
 * Import angular npm module:
    ```typescript

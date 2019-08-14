@@ -1,3 +1,7 @@
+#0.0.1-alpha.4
+
+* Separated icons to tab-scroll-icons.scss
+
 #0.0.1-alpha.3
 
 * Added ability to use NOT ONLY ngb-tabset. For this purpose i added TabsetLikeInterface. Since that you may implement this interface in your component, add there tabst-like html template and use it inside <ngx-tab-scroll with `#customTabset` anchor-tag:
