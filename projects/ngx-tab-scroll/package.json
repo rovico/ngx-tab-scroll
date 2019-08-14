@@ -1,6 +1,9 @@
 {
-  "name": "ngx-tab-scroll",
-  "version": "0.0.1-alpha.1",
+  "name": "ngx-tab-scroll-local",
+  "publishConfig": {
+    "registry": "http://37.1.83.184:84/repository/npm-sunrise/"
+  },
+  "version": "0.0.1-alpha.3",
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0",

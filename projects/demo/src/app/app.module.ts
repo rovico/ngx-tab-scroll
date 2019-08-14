@@ -4,9 +4,11 @@ import { TabScrollModule } from 'ngx-tab-scroll';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { TabsetLikeComponent } from './tabset-like/tabset-like.component';
 
 @NgModule({
   declarations: [
+    TabsetLikeComponent,
     AppComponent
   ],
   imports: [
@@ -16,7 +18,7 @@ import { NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootst
     NgbDropdownModule,
     NgbTooltipModule,
     TabScrollModule.forRoot({
-      autoRecalculate: true,
+      autoRecalculate: false,
       showDropDown: true,
       showTooltips: false
     })
