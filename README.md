@@ -7,6 +7,14 @@ A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-
 [![npm downloads](https://img.shields.io/npm/dm/ngx-tab-scroll.svg?style=flat-square)](http://npm-stat.com/charts.html?package=ngx-tab-scroll&from=2019-08-01)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
 
+### Installation
+
+`npm install ngx-tab-scroll@alpha`
+
+or
+
+`yarn add ngx-tab-scroll@alpha`
+
 ### Usage
 * Import preferred theme styles: 
 
