@@ -4,6 +4,7 @@ $header-height: 42px;
 .ui-tabs-scrollable {
   position: relative;
   > .spacer {
+    height: 100%;
     &:not(.hidden-buttons) {
       margin-left: $button-width;
       margin-right: $button-width;
@@ -29,6 +30,8 @@ $header-height: 42px;
       }
     }
     ngb-tabset {
+      display: block;
+      height: 100%;
       > .nav-tabs {
         display: block;
         flex-wrap: nowrap;
@@ -44,8 +47,13 @@ $header-height: 42px;
         }
       }
       > .tab-content {
-        margin-top: -1px;
         border-top: 1px solid #ddd;
+        height: 100%;
+        margin-top: -1px;
+        > .active {
+          height: 100%;
+          overflow: auto;
+        }
       }
     }
   }
@@ -76,6 +84,7 @@ $header-height: 42px;
       border-top-right-radius: 4px;
     }
   }
+  > .dropup,
   > .dropdown {
     position: absolute;
     top: 0;
@@ -116,7 +125,7 @@ $header-height: 42px;
   }
 }
 
-.dropdown-menu {
+.ngx-tab-scroll-dropdown-menu {
   > li {
     padding: 3px 15px;
     cursor: pointer;
@@ -126,22 +135,6 @@ $header-height: 42px;
       width: 10px;
       margin-left: 0;
       margin-right: 5px;
-    }
-  }
-}
-
-/*make the tabs content be height 100%*/
-.ui-tabs-scrollable > .spacer {
-  height: 100%;
-  ngb-tabset {
-    display: block;
-    height: 100%;
-    > .tab-content {
-      height: 100%;
-      > .active {
-        height: 100%;
-        overflow: auto;
-      }
     }
   }
 }

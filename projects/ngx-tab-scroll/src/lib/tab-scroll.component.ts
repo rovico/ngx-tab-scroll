@@ -62,14 +62,12 @@ export class TabScrollAPI {
 @Component({
   selector: 'ngx-tab-scroll',
   template: `
-    <!--SHOULD NOT BE USED vvv-->
     <ng-template #tooltipLeftTemplate>
       <div [innerHtml]="tooltipLeftHtml"></div>
     </ng-template>
     <ng-template #tooltipRightTemplate>
       <div [innerHtml]="tooltipRightHtml"></div>
     </ng-template>
-    <!--/SHOULD NOT BE USED ^^^-->
     <div class="ui-tabs-scrollable" [ngClass]="{'show-drop-down': !hideDropDown}">
       <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
@@ -89,7 +87,7 @@ export class TabScrollAPI {
         <button type="button" class="btn" ngbDropdownToggle>
           <i class="ts-icon-chevron-down"></i>
         </button>
-        <ul class="dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
+        <ul class="ngx-tab-scroll-dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
           <li [ngClass]="dropDownHeaderClass">
             <ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container>
           </li>

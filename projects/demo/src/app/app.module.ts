@@ -18,7 +18,7 @@ import { TabsetLikeComponent } from './tabset-like/tabset-like.component';
     NgbDropdownModule,
     NgbTooltipModule,
     TabScrollModule.forRoot({
-      autoRecalculate: false,
+      autoRecalculate: true,
       showDropDown: true,
       showTooltips: false
     })
