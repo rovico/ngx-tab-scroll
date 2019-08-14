@@ -1,7 +1,7 @@
 {
-  "name": "ngx-tab-scroll-local",
+  "name": "ngx-tab-scroll",
   "publishConfig": {
-    "registry": "http://37.1.83.184:84/repository/npm-sunrise/"
+    "registry": "https://registry.npmjs.com/"
   },
   "version": "0.0.1-alpha.5",
   "peerDependencies": {
