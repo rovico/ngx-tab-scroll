@@ -1,8 +1,8 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectorRef,
   Component,
   ContentChild,
-  ElementRef, forwardRef,
+  ElementRef, EventEmitter, forwardRef,
   HostListener,
   Input,
   OnDestroy,
@@ -11,8 +11,21 @@ import {
   ViewChild
 } from '@angular/core';
 import { TabScrollConfigService } from './tab-scroll-config';
-import { NgbTab, NgbTabset } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
 import { TabScrollAnimationService } from './tab-scroll-animation.service';
+
+export interface TabsetLikeInterface {
+  /**
+   * Active tab was changed
+   */
+  tabChange: EventEmitter<any>;
+
+  /**
+   * set given tab selected by it's id
+   * @param id string html id param of selecting tab
+   */
+  select(id: string): void;
+}
 
 export class TabScrollTab {
   id: string;
@@ -49,14 +62,12 @@ export class TabScrollAPI {
 @Component({
   selector: 'ngx-tab-scroll',
   template: `
-    <!--SHOULD NOT BE USED vvv-->
     <ng-template #tooltipLeftTemplate>
       <div [innerHtml]="tooltipLeftHtml"></div>
     </ng-template>
     <ng-template #tooltipRightTemplate>
       <div [innerHtml]="tooltipRightHtml"></div>
     </ng-template>
-    <!--/SHOULD NOT BE USED ^^^-->
     <div class="ui-tabs-scrollable" [ngClass]="{'show-drop-down': !hideDropDown}">
       <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
               [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
@@ -76,14 +87,13 @@ export class TabScrollAPI {
         <button type="button" class="btn" ngbDropdownToggle>
           <i class="ts-icon-chevron-down"></i>
         </button>
-        <ul class="dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
+        <ul class="ngx-tab-scroll-dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
           <li [ngClass]="dropDownHeaderClass">
             <ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container>
           </li>
           <li role="menuitem" *ngFor="let tab of dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
               (click)="activateTab(tab)">
-            <span class="dropDownTabActiveMark"
-                          [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}">
+            <span class="dropdown-tab-active-mark" [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}">
               <i class="ts-icon-check"></i>
             </span>{{tab.tabScrollTitle}}
           </li>
@@ -154,12 +164,25 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   @Input() dropDownHeaderTemplate: TemplateRef<any>;
 
-  @ViewChild('spacer') navTabWrapper: ElementRef;
+  /**
+   * wrapper to access nav tabs
+   */
+  @ViewChild('spacer') navTabWrapper!: ElementRef;
 
   /**
-   * get Contentchild NgbTabset
+   * get NgbTabset as ContentChild
    */
-  @ContentChild(forwardRef(() => NgbTabset)) tabset!: NgbTabset;
+  @ContentChild(forwardRef(() => NgbTabset)) ngbTabset: NgbTabset;
+
+  /**
+   * Get custom tabset as ContentChild.
+   * Note, that your component should implement TabsetLikeInterface
+   */
+  @ContentChild('customTabset') customTabset: TabsetLikeInterface;
+
+  get tabset(): TabsetLikeInterface {
+    return this.ngbTabset ? this.ngbTabset : this.customTabset;
+  }
 
   api: TabScrollAPI;
 
@@ -184,7 +207,7 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * Tabs to walk through
    */
-  dropdownTabs: NgbTab[];
+  dropdownTabs: TabScrollTab[];
 
   /**
    * Dropdown should be hidden
@@ -221,7 +244,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private config: TabScrollConfigService,
-    private animation: TabScrollAnimationService
+    private animation: TabScrollAnimationService,
+    private $cdr: ChangeDetectorRef
   ) {
     this.api = new TabScrollAPI(this);
     this.dropdownTabs = [];
@@ -283,9 +307,9 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Go to the tab using dropdown
-   * @param tab NgbTab to make it current
+   * @param tab TabScrollTab to make it current
    */
-  activateTab(tab: NgbTab) {
+  activateTab(tab: TabScrollTab) {
     if (tab.disabled) {
       return;
     }
@@ -332,6 +356,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.dropdownTabs = [];
     }
+
+    this.$cdr.detectChanges();
   }
 
   /**
