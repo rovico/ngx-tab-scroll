@@ -290,6 +290,7 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param event native event
    */
   scrollButtonDown(direction, event) {
+    this.cancelMouseDownInterval();
     event.stopPropagation();
     this.isHolding = true;
     const realScroll = direction === 'left' ? 0 - this.scrollByPixels : this.scrollByPixels;
