@@ -1,5 +1,5 @@
 {
-  "name": "@ibhargav90/ngx-tab-scroll",
+  "name": "ngx-tab-scroll@ibhargav90",
   "publishConfig": {
     "registry": "https://registry.npmjs.com/"
   },
