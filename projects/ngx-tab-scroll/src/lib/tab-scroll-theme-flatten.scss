@@ -3,9 +3,9 @@ $header-height: 35px;
 
 $border-color: #d9d9d9;
 $not-active-hover-color: #e5e5e5;
-$not-active-background-color: #F2F2F2;
+$not-active-background-color: #f2f2f2;
 $not-active-text-color: #666666;
-$active-background-color: #FBFBFB;
+$active-background-color: #fbfbfb;
 $active-text-color: #000;
 $active-border-color: #999;
 $active-border-radius: 3px;
@@ -23,7 +23,7 @@ $active-border-radius: 3px;
         margin-right: calc(-#{$button-width} - #{$button-width});
       }
     }
-    &.hidden-buttons ngb-tabset > .nav-tabs {
+    &.hidden-buttons > .nav-tabs {
       > li:last-child {
         > a {
           border-right-color: $border-color;
@@ -33,7 +33,7 @@ $active-border-radius: 3px;
         }
       }
     }
-    ngb-tabset {
+    .parent {
       display: block;
       height: 100%;
       > .nav-tabs {
@@ -86,7 +86,6 @@ $active-border-radius: 3px;
               background-color: $not-active-background-color;
             }
           }
-
         }
       }
       > .tab-content {
@@ -103,11 +102,12 @@ $active-border-radius: 3px;
 
   > .nav-button {
     overflow: hidden;
-    &:hover, &:active {
+    &:hover,
+    &:active {
       background-color: #e5e5e5;
     }
     &:before {
-      font-family: 'Glyphicons Halflings';
+      font-family: "Glyphicons Halflings";
       color: #8c8c8c;
       font-size: 10px;
     }
@@ -159,14 +159,16 @@ $active-border-radius: 3px;
       border-radius: 0;
       border-bottom-color: $active-border-color;
       &:after {
-        display:none;
+        display: none;
       }
     }
   }
   &.show-drop-down > .spacer:not(.hidden-buttons) {
     margin-right: calc(#{$button-width} + #{$button-width} + #{$button-width});
-    ngb-tabset > .tab-content {
-      margin-right: calc(-#{$button-width} - #{$button-width} - #{$button-width});
+    ul > .tab-content {
+      margin-right: calc(
+        -#{$button-width} - #{$button-width} - #{$button-width}
+      );
     }
   }
   > .nav-button {
@@ -174,14 +176,14 @@ $active-border-radius: 3px;
       right: $button-width;
     }
     &.left-nav-button {
-      right: calc(#{$button-width} + #{$button-width})
+      right: calc(#{$button-width} + #{$button-width});
     }
   }
 }
 
 .ngx-tab-scroll-dropdown-menu {
   min-width: 0;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   > li {
     padding: 3px 15px;
     cursor: pointer;
@@ -203,4 +205,3 @@ $active-border-radius: 3px;
     }
   }
 }
-
