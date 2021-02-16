@@ -486,7 +486,7 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   @HostListener("window:resize", ["$event"])
-  onWindowResize(event) {
+  onWindowResize(_) {
     // delay for a bit to avoid running lots of times.
     clearTimeout(this.winResizeTimeout);
     this.winResizeTimeout = setTimeout(() => {
