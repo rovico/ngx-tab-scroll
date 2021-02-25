@@ -3,19 +3,19 @@
 @import "~bootstrap/scss/bootstrap";
 
 // @import "../../../dist/ngx-tab-scroll/tab-scroll-theme-bootstrap";
-@import "../../../dist/ngx-tab-scroll/tab-scroll-theme-flatten";
-@import '../../../dist/ngx-tab-scroll/tab-scroll-icons';
+@import "../../../../ngx-tab-scroll/projects/ngx-tab-scroll/src/lib/tab-scroll-theme-flatten.scss";
+@import "../../../../ngx-tab-scroll/projects/ngx-tab-scroll/src/lib/tab-scroll-icons.scss";
 
-.tabContent{
-  background-color: #FBFBFB;
+.tabContent {
+  background-color: #fbfbfb;
   height: 100%;
   text-align: center;
-  padding-top: 50px
+  padding-top: 50px;
 }
-.menuHeader{
+.menuHeader {
   padding: 5px 0 10px 15px;
 }
-.menuHeader a{
+.menuHeader a {
   padding-right: 5px;
   font-size: 10px;
 }
@@ -79,7 +79,6 @@
               background-color: $not-active-background-color;
             }
           }
-
         }
       }
       > .tab-content {
@@ -104,5 +103,3 @@
     }
   }
 }
-
-

@@ -1,18 +1,17 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { TabScrollComponent } from 'ngx-tab-scroll';
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
+import { TabScrollComponent } from "../../../ngx-tab-scroll/src/public_api";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild("tabScroll") tabScroll: TabScrollComponent;
 
-  @ViewChild('tabScroll') tabScroll: TabScrollComponent;
+  @ViewChild("tabSetLike") tabSetLike: TabScrollComponent;
 
-  @ViewChild('tabSetLike') tabSetLike: TabScrollComponent;
-
-  tabs: {heading: string, content: string}[] = [];
+  tabs: { id: number; heading: string; content: string }[] = [];
 
   currentTabScroll: TabScrollComponent;
 
@@ -21,11 +20,11 @@ export class AppComponent implements AfterViewInit {
   }
 
   onTabChange($event) {
-    if ($event.nextId === 'ngb-tab-0') {
+    if ($event.nextId === "ngb-tab-0") {
       window.setTimeout(() => {
         this.currentTabScroll = this.tabScroll;
       });
-    } else if ($event.nextId === 'ngb-tab-1') {
+    } else if ($event.nextId === "ngb-tab-1") {
       window.setTimeout(() => {
         this.currentTabScroll = this.tabSetLike;
       });
@@ -34,8 +33,9 @@ export class AppComponent implements AfterViewInit {
 
   addTab() {
     this.tabs.push({
-      heading: 'New Tab ' + this.tabs.length,
-      content: 'This is the content for a NEW tab ' + this.tabs.length
+      id: this.tabs.length + 1,
+      heading: "New Tab " + this.tabs.length,
+      content: "This is the content for a NEW tab " + this.tabs.length,
     });
   }
 

@@ -1,29 +1,31 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { TabScrollModule } from 'ngx-tab-scroll';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { NgbDropdownModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TabsetLikeComponent } from './tabset-like/tabset-like.component';
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import {
+  NgbDropdownModule,
+  NgbNavModule,
+  NgbTooltipModule,
+} from "@ng-bootstrap/ng-bootstrap";
+
+import { TabScrollModule } from "../../../ngx-tab-scroll/src/lib/tab-scroll.module";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { TabsetLikeComponent } from "./tabset-like/tabset-like.component";
 
 @NgModule({
-  declarations: [
-    TabsetLikeComponent,
-    AppComponent
-  ],
+  declarations: [TabsetLikeComponent, AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbTabsetModule,
+    NgbNavModule,
     NgbDropdownModule,
     NgbTooltipModule,
     TabScrollModule.forRoot({
       autoRecalculate: true,
       showDropDown: true,
-      showTooltips: false
-    })
+      showTooltips: false,
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

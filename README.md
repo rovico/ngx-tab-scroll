@@ -1,6 +1,6 @@
-ngx-tab-scroll
+ngx-tab-scroll11
 =====================
-
+forked from ![rovico/ngx-tab-scroll](https://github.com/rovico/ngx-tab-scroll) to make it compitible with Angular 11, REMOVED ngbTabset as it was deprecated in newer version
 A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-bootstrap.github.io/#/components/tabset/examples).
 
 [![npm version](https://img.shields.io/npm/v/ngx-tab-scroll.svg?style=flat-square)](https://www.npmjs.com/package/ngx-tab-scroll)
@@ -9,11 +9,11 @@ A scrollable tab plugin intended for scrolling UI Bootstrap [tabset](https://ng-
 
 ### Installation
 
-`npm install ngx-tab-scroll@alpha`
+`npm install ngx-tab-scroll11@0.0.2`
 
 or
 
-`yarn add ngx-tab-scroll@alpha`
+`yarn add ngx-tab-scroll11@0.0.2`
 
 ### Usage
 * Import preferred theme styles: 

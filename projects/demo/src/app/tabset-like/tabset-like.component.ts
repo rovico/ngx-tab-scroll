@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { TabsetLikeInterface } from 'ngx-tab-scroll';
+import { Component, EventEmitter, OnInit } from "@angular/core";
+import { TabsetLikeInterface } from "../../../../ngx-tab-scroll/src/lib/tab-scroll.component";
 
 export class CustomTab {
   id: string;
@@ -19,22 +19,28 @@ export class CustomTab {
 }
 
 @Component({
-  selector: 'app-tabset-like',
+  selector: "app-tabset-like",
   template: `
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" [class.active]="tab.active" *ngFor="let tab of tabs">
-        <a href [id]="tab.id" class="nav-link" [class.active]="tab.active" (click)="select(tab.id); $event.preventDefault()">
-          <span class="uib-tab-heading">{{tab.name}}</span>
+        <a
+          href
+          [id]="tab.id"
+          class="nav-link"
+          [class.active]="tab.active"
+          (click)="select(tab.id); $event.preventDefault()"
+        >
+          <span class="uib-tab-heading">{{ tab.name }}</span>
         </a>
       </li>
     </ul>
-    <div *ngIf="currentTab">{{currentTab.content}}</div>
-  `
+    <div *ngIf="currentTab">{{ currentTab.content }}</div>
+  `,
 })
 export class TabsetLikeComponent implements OnInit, TabsetLikeInterface {
   tabs: CustomTab[] = [];
 
-  tabChange: EventEmitter<any> = new EventEmitter();
+  navChange: EventEmitter<any> = new EventEmitter();
 
   currentTab: CustomTab;
 
@@ -50,10 +56,10 @@ export class TabsetLikeComponent implements OnInit, TabsetLikeInterface {
       return;
     }
     this.currentTab = this.tabs
-      .map(tab => tab.deactivate())
-      .find(tab => tab.id === id)
+      .map((tab) => tab.deactivate())
+      .find((tab) => tab.id === id)
       .activate();
-    this.tabChange.next();
+    this.navChange.next();
   }
 
   initTab() {

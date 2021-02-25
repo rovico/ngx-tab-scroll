@@ -1,24 +1,26 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
-  ElementRef, EventEmitter, forwardRef,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
   HostListener,
   Input,
   OnDestroy,
   OnInit,
   TemplateRef,
-  ViewChild
-} from '@angular/core';
-import { TabScrollConfigService } from './tab-scroll-config';
-import { NgbTabset } from '@ng-bootstrap/ng-bootstrap';
-import { TabScrollAnimationService } from './tab-scroll-animation.service';
-
+  ViewChild,
+} from "@angular/core";
+import { TabScrollConfigService } from "./tab-scroll-config";
+import { NgbNav } from "@ng-bootstrap/ng-bootstrap";
+import { TabScrollAnimationService } from "./tab-scroll-animation.service";
 export interface TabsetLikeInterface {
   /**
    * Active tab was changed
    */
-  tabChange: EventEmitter<any>;
+  navChange: EventEmitter<any>;
 
   /**
    * set given tab selected by it's id
@@ -42,8 +44,7 @@ export class TabScrollTab {
  * scrollTabIntoView(number) - scroll the tab index into center of view.
  */
 export class TabScrollAPI {
-  constructor(private $scope: TabScrollComponent) {
-  }
+  constructor(private $scope: TabScrollComponent) {}
 
   doRecalculate() {
     this.$scope.reCalcAll();
@@ -54,13 +55,12 @@ export class TabScrollAPI {
   }
 }
 
-
 /**
  * Based on code of angular-ui-tab-scroll Version: 2.3.5
  * https://github.com/VersifitTechnologies/angular-ui-tab-scroll
  */
 @Component({
-  selector: 'ngx-tab-scroll',
+  selector: "ngx-tab-scroll",
   template: `
     <ng-template #tooltipLeftTemplate>
       <div [innerHtml]="tooltipLeftHtml"></div>
@@ -68,43 +68,81 @@ export class TabScrollAPI {
     <ng-template #tooltipRightTemplate>
       <div [innerHtml]="tooltipRightHtml"></div>
     </ng-template>
-    <div class="ui-tabs-scrollable" [ngClass]="{'show-drop-down': !hideDropDown}">
-      <button type="button" (mousedown)="scrollButtonDown('left', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
-              [disabled]="disableLeft" class="btn nav-button left-nav-button" [placement]="tooltipLeftDirection"
-              [ngbTooltip]="tooltipLeftTemplate" [disableTooltip]="!userShowTooltips">
+    <div
+      class="ui-tabs-scrollable"
+      [ngClass]="{ 'show-drop-down': !hideDropDown }"
+    >
+      <button
+        type="button"
+        (mousedown)="scrollButtonDown('left', $event)"
+        (mouseup)="scrollButtonUp()"
+        [hidden]="hideButtons"
+        [disabled]="disableLeft"
+        class="btn nav-button left-nav-button"
+        [placement]="tooltipLeftDirection"
+        [ngbTooltip]="tooltipLeftTemplate"
+        [disableTooltip]="!userShowTooltips"
+      >
         <i class="ts-icon-chevron-left"></i>
       </button>
-      <div #spacer class="spacer" [ngClass]="{'hidden-buttons': hideButtons}">
+      <div #spacer class="spacer" [ngClass]="{ 'hidden-buttons': hideButtons }">
         <ng-content></ng-content>
       </div>
-      <button type="button" (mousedown)="scrollButtonDown('right', $event)" (mouseup)="scrollButtonUp()" [hidden]="hideButtons"
-              [disabled]="disableRight" class="btn nav-button right-nav-button" [placement]="tooltipRightDirection"
-              [ngbTooltip]="tooltipRightTemplate" [disableTooltip]="!userShowTooltips">
+      <button
+        type="button"
+        (mousedown)="scrollButtonDown('right', $event)"
+        (mouseup)="scrollButtonUp()"
+        [hidden]="hideButtons"
+        [disabled]="disableRight"
+        class="btn nav-button right-nav-button"
+        [placement]="tooltipRightDirection"
+        [ngbTooltip]="tooltipRightTemplate"
+        [disableTooltip]="!userShowTooltips"
+      >
         <i class="ts-icon-chevron-right"></i>
       </button>
 
-      <div class="btn-group" [ngClass]="[dropDownClass || '']" ngbDropdown container="body" [hidden]="hideDropDown">
+      <div
+        class="btn-group"
+        [ngClass]="[dropDownClass || '']"
+        ngbDropdown
+        container="body"
+        [hidden]="hideDropDown"
+      >
         <button type="button" class="btn" ngbDropdownToggle>
           <i class="ts-icon-chevron-down"></i>
         </button>
-        <ul class="ngx-tab-scroll-dropdown-menu" ngbDropdownMenu role="menu" [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']">
+        <ul
+          class="ngx-tab-scroll-dropdown-menu"
+          ngbDropdownMenu
+          role="menu"
+          [ngClass]="[dropDownMenuClass || 'dropdown-menu-right']"
+        >
           <li [ngClass]="dropDownHeaderClass">
-            <ng-container [ngTemplateOutlet]="dropDownHeaderTemplate"></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="dropDownHeaderTemplate"
+            ></ng-container>
           </li>
-          <li role="menuitem" *ngFor="let tab of dropdownTabs" [ngClass]="{'disabled': tab.disabled, 'active': tab.active}"
-              (click)="activateTab(tab)">
-            <span class="dropdown-tab-active-mark" [ngStyle]="{'visibility': tab.active ? 'visible' : 'hidden'}">
-              <i class="ts-icon-check"></i>
-            </span>{{tab.tabScrollTitle}}
+          <li
+            role="menuitem"
+            *ngFor="let tab of dropdownTabs"
+            [ngClass]="{ disabled: tab.disabled, active: tab.active }"
+            (click)="activateTab(tab)"
+          >
+            <span
+              class="dropdown-tab-active-mark"
+              [ngStyle]="{ visibility: tab.active ? 'visible' : 'hidden' }"
+            >
+              <i class="ts-icon-check"></i> </span
+            >{{ tab.tabScrollTitle }}
           </li>
         </ul>
       </div>
     </div>
   `,
-  providers: [TabScrollAnimationService]
+  providers: [TabScrollAnimationService],
 })
 export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
-
   /**
    * whether or not to show the drop-down for navigating the tabs,
    * the drop-down reflects the selected tab and reflect if a tab is disabled. default is true.
@@ -167,21 +205,21 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * wrapper to access nav tabs
    */
-  @ViewChild('spacer') navTabWrapper!: ElementRef;
+  @ViewChild("spacer") navTabWrapper!: ElementRef;
 
   /**
-   * get NgbTabset as ContentChild
+   * get NgbNav as ContentChild
    */
-  @ContentChild(forwardRef(() => NgbTabset)) ngbTabset: NgbTabset;
+  @ContentChild(forwardRef(() => NgbNav)) ngbNav: NgbNav;
 
   /**
    * Get custom tabset as ContentChild.
    * Note, that your component should implement TabsetLikeInterface
    */
-  @ContentChild('customTabset') customTabset: TabsetLikeInterface;
+  @ContentChild("customTabset") customTabset: TabsetLikeInterface;
 
   get tabset(): TabsetLikeInterface {
-    return this.ngbTabset ? this.ngbTabset : this.customTabset;
+    return this.ngbNav ? this.ngbNav : this.customTabset;
   }
 
   api: TabScrollAPI;
@@ -251,19 +289,33 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dropdownTabs = [];
     this.hideButtons = true;
     this.hideDropDown = true;
-    this.tooltipRightHtml = '';
-    this.tooltipLeftHtml = '';
+    this.tooltipRightHtml = "";
+    this.tooltipLeftHtml = "";
     this.disableLeft = true;
     this.disableRight = true;
   }
 
   ngOnInit() {
-    this.tooltipLeftDirection = this.tooltipLeftPlacement ? this.tooltipLeftPlacement : this.config.getConfig().tooltipLeftPlacement;
-    this.tooltipRightDirection = this.tooltipRightPlacement ? this.tooltipRightPlacement : this.config.getConfig().tooltipRightPlacement;
-    this.userShowDropDown = this.showDropDown !== undefined ? this.showDropDown : this.config.getConfig().showDropDown;
-    this.userShowTooltips = this.showTooltips !== undefined ? this.showTooltips : this.config.getConfig().showTooltips;
-    this.scrollByPixels = this.scrollBy ? this.scrollBy : this.config.getConfig().scrollBy;
-    this.leftScrollAdditionPixels = this.leftScrollAddition ? this.leftScrollAddition : this.config.getConfig().leftScrollAddition;
+    this.tooltipLeftDirection = this.tooltipLeftPlacement
+      ? this.tooltipLeftPlacement
+      : this.config.getConfig().tooltipLeftPlacement;
+    this.tooltipRightDirection = this.tooltipRightPlacement
+      ? this.tooltipRightPlacement
+      : this.config.getConfig().tooltipRightPlacement;
+    this.userShowDropDown =
+      this.showDropDown !== undefined
+        ? this.showDropDown
+        : this.config.getConfig().showDropDown;
+    this.userShowTooltips =
+      this.showTooltips !== undefined
+        ? this.showTooltips
+        : this.config.getConfig().showTooltips;
+    this.scrollByPixels = this.scrollBy
+      ? this.scrollBy
+      : this.config.getConfig().scrollBy;
+    this.leftScrollAdditionPixels = this.leftScrollAddition
+      ? this.leftScrollAddition
+      : this.config.getConfig().leftScrollAddition;
   }
 
   ngOnDestroy(): void {
@@ -271,14 +323,21 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.tabContainer = this.navTabWrapper.nativeElement.querySelector('ul.nav-tabs');
+    this.tabContainer = this.navTabWrapper.nativeElement.querySelector(
+      "ul.nav-tabs"
+    );
     if (!this.tabContainer) {
-      throw new Error('You have to specify ngb-bootstrap tabs right between inside component tag');
+      throw new Error(
+        "You have to specify ngb-bootstrap tabs right between inside component tag"
+      );
     }
 
-    const autoRecalc = this.autoRecalculate !== undefined ? this.autoRecalculate : this.config.getConfig().autoRecalculate;
+    const autoRecalc =
+      this.autoRecalculate !== undefined
+        ? this.autoRecalculate
+        : this.config.getConfig().autoRecalculate;
     if (autoRecalc) {
-      this.tabset.tabChange.subscribe(() => {
+      this.tabset.navChange.subscribe(() => {
         this.reCalcAll();
       });
     }
@@ -293,12 +352,19 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cancelMouseDownInterval();
     event.stopPropagation();
     this.isHolding = true;
-    const realScroll = direction === 'left' ? 0 - this.scrollByPixels : this.scrollByPixels;
-    this.animation.scrollTo(this.tabContainer, realScroll, 150, () => {
-      setTimeout(() => {
-        this.reCalcSides();
-      });
-    }, true);
+    const realScroll =
+      direction === "left" ? 0 - this.scrollByPixels : this.scrollByPixels;
+    this.animation.scrollTo(
+      this.tabContainer,
+      realScroll,
+      150,
+      () => {
+        setTimeout(() => {
+          this.reCalcSides();
+        });
+      },
+      true
+    );
     this.initMouseDownInterval(realScroll, event);
   }
 
@@ -328,26 +394,34 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
-    this.hideButtons = this.tabContainer.scrollWidth <= this.tabContainer.offsetWidth;
+    this.hideButtons =
+      this.tabContainer.scrollWidth <= this.tabContainer.offsetWidth;
     this.hideDropDown = this.userShowDropDown ? this.hideButtons : true;
     this.isButtonsVisible = !this.hideButtons;
 
     if (!this.hideButtons) {
       if (!this.hideDropDown) {
         window.setTimeout(() => {
-          this.dropdownTabs = this.getAllTabs().reduce((acu, htmlTab: HTMLElement) => {
-            const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
-            if (ignore) {
-              return acu;
-            }
-            const heading = htmlTab.getAttribute('data-tabScrollHeading');
-            const tabScope = new TabScrollTab();
-            tabScope.id = htmlTab.firstElementChild.getAttribute('id');
-            tabScope.active = htmlTab.firstElementChild.classList.contains('active');
-            tabScope.tabScrollTitle = heading ? heading : htmlTab.textContent.trim();
+          this.dropdownTabs = this.getAllTabs().reduce(
+            (acu, htmlTab: HTMLElement) => {
+              const ignore = htmlTab.getAttribute("data-tabScrollIgnore");
+              if (ignore) {
+                return acu;
+              }
+              const heading = htmlTab.getAttribute("data-tabScrollHeading");
+              const tabScope = new TabScrollTab();
+              tabScope.id = htmlTab.firstElementChild.getAttribute("id");
+              tabScope.active = htmlTab.firstElementChild.classList.contains(
+                "active"
+              );
+              tabScope.tabScrollTitle = heading
+                ? heading
+                : htmlTab.textContent.trim();
 
-            return acu.concat([tabScope]);
-          }, []);
+              return acu.concat([tabScope]);
+            },
+            []
+          );
         });
       } else {
         this.dropdownTabs = [];
@@ -374,12 +448,17 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     const allTabs = this.getAllTabs();
 
     // first we find the tab element.
-    if (tabIndex) { // scroll tab index into view
-      if (allTabs.length > tabIndex) { // only if its really exist
+    if (tabIndex) {
+      // scroll tab index into view
+      if (allTabs.length > tabIndex) {
+        // only if its really exist
         tabToScroll = allTabs[tabIndex];
       }
-    } else { // scroll selected tab into view
-      const activeTab = allTabs.find((htmlTab: HTMLElement) => htmlTab.firstElementChild.classList.contains('active'));
+    } else {
+      // scroll selected tab into view
+      const activeTab = allTabs.find((htmlTab: HTMLElement) =>
+        htmlTab.firstElementChild.classList.contains("active")
+      );
       if (activeTab) {
         tabToScroll = activeTab;
       }
@@ -387,7 +466,10 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // now let's scroll it into view.
     if (tabToScroll) {
-      const position = this.getHtmlElementPosition(tabToScroll, this.tabContainer);
+      const position = this.getHtmlElementPosition(
+        tabToScroll,
+        this.tabContainer
+      );
       let dif: number;
       if (position.left - this.leftScrollAdditionPixels < 0) {
         dif = position.left - 20 - this.leftScrollAdditionPixels;
@@ -403,8 +485,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  onWindowResize(event) {
+  @HostListener("window:resize", ["$event"])
+  onWindowResize(_) {
     // delay for a bit to avoid running lots of times.
     clearTimeout(this.winResizeTimeout);
     this.winResizeTimeout = setTimeout(() => {
@@ -434,9 +516,15 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
   initMouseDownInterval(realScroll, event) {
     this.mouseDownInterval = setInterval(() => {
       if (this.isHolding) {
-        this.animation.scrollTo(this.tabContainer, realScroll, 150, () => {
-          this.reCalcSides();
-        }, true);
+        this.animation.scrollTo(
+          this.tabContainer,
+          realScroll,
+          150,
+          () => {
+            this.reCalcSides();
+          },
+          true
+        );
 
         if (event.target.disabled) {
           this.cancelMouseDownInterval();
@@ -449,7 +537,9 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.tabContainer || this.hideButtons) {
       return;
     }
-    this.disableRight = this.tabContainer.scrollLeft >= this.tabContainer.scrollWidth - this.tabContainer.offsetWidth;
+    this.disableRight =
+      this.tabContainer.scrollLeft >=
+      this.tabContainer.scrollWidth - this.tabContainer.offsetWidth;
     this.disableLeft = this.tabContainer.scrollLeft <= 0;
 
     if (this.userShowTooltips) {
@@ -466,8 +556,8 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.getAllTabs().forEach((htmlTab: HTMLElement) => {
       const position = this.getHtmlElementPosition(htmlTab, this.tabContainer);
-      const heading = htmlTab.getAttribute('data-tabScrollHeading');
-      const ignore = htmlTab.getAttribute('data-tabScrollIgnore');
+      const heading = htmlTab.getAttribute("data-tabScrollHeading");
+      const ignore = htmlTab.getAttribute("data-tabScrollIgnore");
 
       if (position.right > this.tabContainer.offsetWidth && !ignore) {
         if (heading) {
@@ -484,19 +574,18 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
           leftTooltips.push(htmlTab.textContent);
         }
       }
-
     });
 
-    this.tooltipRightHtml = rightTooltips.join('<br/>');
-    this.tooltipLeftHtml = leftTooltips.join('<br/>');
+    this.tooltipRightHtml = rightTooltips.join("<br/>");
+    this.tooltipLeftHtml = leftTooltips.join("<br/>");
   }
 
   /**
    * Returns all tabs as array oh html elements
    */
   private getAllTabs(): HTMLElement[] {
-    const allTabs = this.tabContainer.querySelectorAll('ul.nav-tabs > li');
-    return <HTMLElement[]>(Array.from(allTabs));
+    const allTabs = this.tabContainer.querySelectorAll("ul.nav-tabs > li");
+    return <HTMLElement[]>Array.from(allTabs);
   }
 
   /**
@@ -504,10 +593,16 @@ export class TabScrollComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param el tested element
    * @param parent parent of tested element
    */
-  private getHtmlElementPosition(el: HTMLElement, parent: HTMLElement): { right: number, left: number } {
-    const right = el.getBoundingClientRect().left + el.getBoundingClientRect().width - parent.getBoundingClientRect().left;
-    const left = el.getBoundingClientRect().left - parent.getBoundingClientRect().left;
-    return {right, left};
+  private getHtmlElementPosition(
+    el: HTMLElement,
+    parent: HTMLElement
+  ): { right: number; left: number } {
+    const right =
+      el.getBoundingClientRect().left +
+      el.getBoundingClientRect().width -
+      parent.getBoundingClientRect().left;
+    const left =
+      el.getBoundingClientRect().left - parent.getBoundingClientRect().left;
+    return { right, left };
   }
 }
-
